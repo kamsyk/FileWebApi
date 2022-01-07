@@ -1,6 +1,6 @@
 using System;
 
-namespace FileWebApi
+namespace SlideShowClient
 {
     public class WeatherForecast
     {
