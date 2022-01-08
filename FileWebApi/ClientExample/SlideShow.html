@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Slide Show</title>
+    <script>
+        function getFiles() {
+            const uri = 'https://localhost:44339/slideshowapi';
+                        
+            displayMessage("Loading photos ...");
+            
+            fetch(uri, {method: 'GET' })
+                .then(response => response.json())
+                .then(data => runSlideShow(data))
+                .catch(error => displayMessage('Unable to get photos.' + error));
+            
+        }
+                
+        
+        function runSlideShow(files) {
+            
+            if (files != null && files[0].startsWith("SlideShowApiError:")) {
+                displayMessage(files[0]);
+                return;
+            }
+            
+        
+            if (files === null || files.length === 0) {
+                alert("No Files Were Found");
+                return;
+            }
+                        
+            hideMessage();
+            let img = document.getElementById('imgPhoto');
+            imgPhoto.style.display = "block";
+            imgPhoto.src = files[0];
+
+            runSlideShowAsync(files);
+  
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function runSlideShowAsync(files) {
+            for (let i = 1; i < files.length; i++) {
+                await sleep(3000);
+                imgPhoto.src = files[i];
+            }
+        }
+
+        function displayMessage(strMsg) {
+            let spanInfo = document.getElementById('spanInfo');
+            spanInfo.style.display = "block";
+            spanInfo.innerHTML = strMsg;
+        }
+
+        function hideMessage() {
+            let spanInfo = document.getElementById('spanInfo');
+            spanInfo.style.display = "none";
+            spanInfo.innerHTML = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>Slide Show</h1>
+    <input type="button" value="Start Slide Show" onclick="getFiles()">
+    <span id="spanInfo"></span>
+    <img id="imgPhoto" style="display:none;width:450px;" />
+</body>
+</html>

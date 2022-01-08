@@ -39,11 +39,16 @@ namespace FileWebApi.Controllers
         public IEnumerable<string> Get() {
             string path = AppContext.BaseDirectory;
 
-            //return Directory.GetFiles(_slideShowFolder, "*.JPG|*.jpg|*.bmp|*BMP", SearchOption.AllDirectories);
+            try {
 
-            return Directory.GetFiles(_slideShowFolder, "*.*", SearchOption.AllDirectories)
-            .Where(s => s.ToLower().EndsWith(".jpg") 
-            || s.ToLower().EndsWith(".bmp")).ToList();
+                return Directory.GetFiles(_slideShowFolder, "*.*", SearchOption.AllDirectories)
+                .Where(s => s.ToLower().EndsWith(".jpg")
+                || s.ToLower().EndsWith(".bmp")
+                || s.ToLower().EndsWith(".gif")
+                || s.ToLower().EndsWith(".png")).ToList();
+            } catch (Exception ex) {
+                return new string[] { "SlideShowApiError:" + ex.ToString() };
+            }
         }
                
     }
